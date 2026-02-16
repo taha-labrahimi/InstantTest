@@ -2,6 +2,8 @@
 
 An AI-powered web application that generates intelligent JUnit 5 tests from Java code using Google's Gemini API.
 
+![Instant Test Screenshot](./img.png)
+
 ## 🎯 Features
 
 - **Smart Test Generation**: Uses AI to understand your code and business logic.
