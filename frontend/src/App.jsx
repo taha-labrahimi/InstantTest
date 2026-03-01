@@ -9,6 +9,7 @@ import TestOutput from './components/TestOutput';
 import MethodPriority from './components/MethodPriority';
 import AboutPage from './components/AboutPage';
 import PomAnalyzer from './components/PomAnalyzer';
+import ApiKeyScreen from './components/ApiKeyScreen';
 import { extractMethods, detectClassType, extractAnnotations } from './utils/javaParser';
 
 const API_URL = 'http://localhost:3000/api';
@@ -32,6 +33,7 @@ const SAMPLE_CODE = `public class UserService {
 }`;
 
 function App() {
+  const [geminiApiKey, setGeminiApiKey] = useState(() => localStorage.getItem('gemini_api_key') || '');
   const [code, setCode] = useState(SAMPLE_CODE);
   const [notes, setNotes] = useState('');
   const [casePriorities, setCasePriorities] = useState({
@@ -66,6 +68,16 @@ function App() {
     });
   }, [code]);
 
+  const handleKeySubmit = (key) => {
+    localStorage.setItem('gemini_api_key', key);
+    setGeminiApiKey(key);
+  };
+
+  const handleClearKey = () => {
+    localStorage.removeItem('gemini_api_key');
+    setGeminiApiKey('');
+  };
+
   const handleGenerate = async () => {
     if (!code.trim()) {
       setError('Please enter some Java code');
@@ -78,6 +90,7 @@ function App() {
 
     try {
       const response = await axios.post(`${API_URL}/generate`, {
+        apiKey: geminiApiKey,
         code,
         notes,
         casePriorities,
@@ -110,13 +123,17 @@ function App() {
     }
   };
 
+  if (!geminiApiKey) {
+    return <ApiKeyScreen onKeySubmit={handleKeySubmit} />;
+  }
+
   if (page === 'about') {
     return <AboutPage onBack={() => setPage('app')} />;
   }
 
   return (
     <div className="h-screen flex flex-col bg-[#0a0a12] overflow-hidden">
-      <Header onAbout={() => setPage('about')} />
+      <Header onAbout={() => setPage('about')} onClearKey={handleClearKey} />
       
       <main className="flex-1 p-5 min-h-0">
         <div className="max-w-[1900px] mx-auto h-full">

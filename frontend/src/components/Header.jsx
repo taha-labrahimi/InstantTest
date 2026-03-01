@@ -1,6 +1,6 @@
-import { TestTube2, Zap, HelpCircle } from 'lucide-react';
+import { TestTube2, Zap, HelpCircle, KeyRound } from 'lucide-react';
 
-export default function Header({ onAbout }) {
+export default function Header({ onAbout, onClearKey }) {
   return (
     <header className="relative overflow-hidden border-b border-green-500/10">
       {/* Animated background gradient */}
@@ -31,6 +31,14 @@ export default function Header({ onAbout }) {
           >
             <HelpCircle size={14} />
             How It Works
+          </button>
+          <button
+            onClick={onClearKey}
+            title="Change Gemini API Key"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-gray-400 hover:text-violet-400 border border-white/10 hover:border-violet-500/30 rounded-lg transition-all duration-200 hover:bg-violet-500/5"
+          >
+            <KeyRound size={14} />
+            API Key
           </button>
           <div className="flex items-center gap-2 text-xs text-gray-500">
             <Zap size={14} className="text-green-400" />

@@ -1,9 +1,4 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import dotenv from 'dotenv';
-
-dotenv.config();
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 const MODELS = ['gemini-2.5-flash-preview-04-17', 'gemini-2.0-flash-lite', 'gemini-2.0-flash'];
 
@@ -11,7 +6,8 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export async function generateTest(prompt) {
+export async function generateTest(prompt, apiKey) {
+  const genAI = new GoogleGenerativeAI(apiKey);
   let lastError = null;
 
   for (const modelName of MODELS) {

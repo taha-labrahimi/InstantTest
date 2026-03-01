@@ -6,7 +6,14 @@ const router = express.Router();
 
 router.post('/generate', async (req, res) => {
   try {
-    const { code, notes, casePriorities, methodPriorities, classType, annotations, pomInfo } = req.body;
+    const { apiKey, code, notes, casePriorities, methodPriorities, classType, annotations, pomInfo } = req.body;
+
+    if (!apiKey || typeof apiKey !== 'string' || !apiKey.trim()) {
+      return res.status(400).json({
+        success: false,
+        error: 'A Gemini API key is required'
+      });
+    }
 
     if (!code || typeof code !== 'string' || code.trim().length === 0) {
       return res.status(400).json({
@@ -33,8 +40,8 @@ router.post('/generate', async (req, res) => {
     const annotationList = Array.isArray(annotations) ? annotations : [];
 
     const prompt = buildPrompt(code, notes || '', priorities, methodPrios, classType || 'unknown', pomInfo || null, annotationList);
-    
-    const result = await generateTest(prompt);
+
+    const result = await generateTest(prompt, apiKey.trim());
     
     res.json(result);
   } catch (error) {
