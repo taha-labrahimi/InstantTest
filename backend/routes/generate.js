@@ -46,10 +46,13 @@ router.post('/generate', async (req, res) => {
     res.json(result);
   } catch (error) {
     console.error('Generation error:', error);
-    res.status(500).json({
-      success: false,
-      error: error.message || 'Failed to generate test'
-    });
+    if (error.isInvalidKey) {
+      return res.status(401).json({ success: false, error: 'Invalid API key', invalidKey: true });
+    }
+    if (error.isRateLimit) {
+      return res.status(429).json({ success: false, error: error.message, rateLimited: true, retryAfter: error.retryAfter || 30 });
+    }
+    res.status(500).json({ success: false, error: error.message || 'Failed to generate test' });
   }
 });
 

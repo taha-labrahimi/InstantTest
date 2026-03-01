@@ -7,10 +7,10 @@ const FEATURES = [
   { icon: ShieldCheck,       color: 'text-violet-400', bg: 'bg-violet-400/10 border-violet-400/20', text: 'Your key stays in your browser — never stored on our servers' },
 ];
 
-export default function ApiKeyScreen({ onKeySubmit }) {
+export default function ApiKeyScreen({ onKeySubmit, initialError = '' }) {
   const [key, setKey] = useState('');
   const [show, setShow] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState(initialError);
 
   const handleSubmit = (e) => {
     e.preventDefault();
